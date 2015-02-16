@@ -1,9 +1,10 @@
 ##  Programming Assignment #2
 ##  Coursera R Programming course
-##  This program includes two functions
+##  Program:  cachematrix.R
+##  cachematrix.R includes two functions
 ##  makeCacheMatrix() creates a matrix that caches its inverse
 ##  cacheSolve() computes the inverse of the matrix defined by makeCacheMatrix()
-##    if the inverse is already calculated, cacheSolve() returns inverser from cache
+##    if the inverse is already calculated, cacheSolve() returns inverse from cache
 ##  Code adapted from makeVector() and cachemean() sample functions
 
 
