@@ -1,48 +1,66 @@
 ##  Programming Assignment #2
 ##  Coursera R Programming course
 ##  Program:  cachematrix.R
-##  cachematrix.R includes two functions
-##  makeCacheMatrix() creates a matrix that caches its inverse
-##  cacheSolve() computes the inverse of the matrix defined by makeCacheMatrix()
-##    if the inverse is already calculated, cacheSolve() returns inverse from cache
+##  cachematrix.R includes two functions to compute and return the inverse of invertible square matrix x
+##  makeCacheMatrix(x) takes an invertible square matrix x and 
+##    returns a list of 4 functions to set the input matrix, get the input matrix,
+##    cache the value of the computed inverse matrix, and return the value of the inverse matrix
+##  cacheSolve(x) takes a matrix processed by makeCacheMatrix(x) 
+##  The first time is cacheSolve(x), the inverse matrix is computed using R function solve(x, ...)
+##  The computed inverse matrix is stored for subsequent function calls
+##  If cacheSolve(x) is called again and the input matrix is not re-input via x$set()
+##    then the cached inverse matrix is returned
 ##  Code adapted from makeVector() and cachemean() sample functions
 
 
-## Create matrix that caches its inverse
-
+##  Create a list of functions to set and get an invertible square matrix and to cache and return its inverse
 makeCacheMatrix <- function(x = matrix()) {
-       #  Argument x is a square matrix whose inverse exists
-        m <- NULL  #  Assigns m the value NULL in the local environment
-        set <- function(y) {
-                x <<- y  #  Assigns the  x the value of the argument y in the parent environment
-                m <<- NULL  #  Assigns m the value NULL in the parent environment -- if set is called, m is NULL
+        ##  Argument x is a square matrix whose inverse exists
+        ##  Assigns m the value NULL in the local environment
+        m <- NULL  
+        ##  set() assigns x the value of square matrix y and sets m to NULL, both in the parent environment 
+        set <- function(y = matrix()) {
+                x <<- y  
+                m <<- NULL
         }
-        get <- function() x  #  If get() is called, the value of x the numeric vector is returned
+        ##  get() returns the value of square matrix x, which will subsequently have its inverse computed
+        get <- function() x
+        ##  setinvmat() assigns m the value of vm, the cached inverse matrix of x
         setinvmat <- function(vm) {
-                m <<- vm  #  If setinvmat() is called, m is assigned the value of argument vm from the parent environment
+                m <<- vm          
         }
-        getinvmat <- function() m  #  If getinvmat() is called, m is returned
-        list(set = set, get = get,  #  Puts all 4 functions in a list; returns the list
+        ##  getinvmat() returns the value of m, the inverse matrix of x
+        getinvmat <- function() m
+        ##  Return the four functions as a list
+        list(set = set, get = get, 
              setinvmat = setinvmat,
              getinvmat = getinvmat)
 }
 
 
-## Return the inverse of square matrix 'x' supplied as argument to makeCacheMatrix, cached version returned if available
+##  Return the inverse of invertible square matrix y supplied as argument to makeCacheMatrix(y)
+##  Cached inverse matrix returned if available
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-        #  cachemean() returns mean of vector created above in makeVector
-        #  if mean was already calculated, it returns the cached mean
-        #  if mean wasn't already calculated, this function will calculate and return it
-        #  argument x is the vector created by makeVector()   
-        m <- x$getinvmat()  #  Assigns the value of m from makeVector function to q; either NULL or non-NULL
+        ##  Argument is object "makeCachematrix(y)" or object "x$set(z)", 
+        ##    where z is a "new" invertible square matrix whose inverse we wish to compute
+        ##  If the inverse of y was already computed and cached and if y is not reset to z,
+        ##    then the cached version of the inverse of y is returned (saves on computation time)
+        ##  If the inverse of y was not previously computed, or if y is reset to z via x$set(z), 
+        ##    then the inverse of y is computed, cached for subsequent calls of cacheSolve(x, ...), and returned
+        ##  Assign local variable m the current value of the inverse matrix of y, 
+        ##    m will be NULL if never computed or if y is reset
+        m <- x$getinvmat()
+        ##  If m is not NULL, it is returned
         if(!is.null(m)) {
                 message("getting cached data")
                 return(m)  #  If q is not null, i.e., mean already exists, q is returned along with text
         }
-        data <- x$get()  #  Gets the data, i.e., the x argument to makeVector(x)
-        m <- solve(data, ...)  #  Calculates the mean of the x argument to makeVector(x)
-        x$setinvmat(m)  #  This is the cache step; assigns the value of q to m
-        m  #  Returns m
+        ##  Otherwise, data is assigned value of y, m is assigned value of computed inverse of y
+        data <- x$get()
+        m <- solve(data, ...)
+        ##  Computed inverse, m, is cached by calling x$setinvmat(m) and then returned
+        ##  If cacheSolve(x, ...) is called again and y is not reset, this cached inverse is returned
+        x$setinvmat(m)
+        m
 }
