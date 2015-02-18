@@ -42,8 +42,8 @@ makeCacheMatrix <- function(x = matrix()) {
 ##  Cached inverse matrix returned if available
 
 cacheSolve <- function(x, ...) {
-        ##  Argument is object "makeCachematrix(y)" or object "x$set(z)", 
-        ##    where z is a "new" invertible square matrix whose inverse we wish to compute
+        ##  Argument is object 'makeCachematrix(y)' or object 'x$set(z)', 
+        ##    where z is a new"invertible square matrix whose inverse we wish to compute
         ##  If the inverse of y was already computed and cached and if y is not reset to z,
         ##    then the cached version of the inverse of y is returned (saves on computation time)
         ##  If the inverse of y was not previously computed, or if y is reset to z via x$set(z), 
